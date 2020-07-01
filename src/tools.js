@@ -5,21 +5,24 @@ const { utils: { log, sleep } } = Apify;
 
 const getAndValidateInput = async () => {
     const input = await Apify.getInput();
-    log.info(`Input: ${JSON.stringify(input)}`);
 
     const { location, offerType, type, proxyConfiguration, notificationsEmail, priceMin, priceMax, areaMin, areaMax } = input;
+
+    log.info(`Search Location: ${location}`);
+    log.info(`Object Type: ${type}`);
+    log.info(`Operation Type: ${offerType}`);
 
     if (!offerType || !type || !location) {
         throw new Error('Check input! Offer type (sale/rent/auction), type (house/apartment/etc) or location are missing');
     }
 
     const price = {};
-    if (priceMin) price.from = priceMin;
-    if (priceMax) price.to = priceMax;
+    if (priceMin) price.from = priceMin.toString();
+    if (priceMax) price.to = priceMax.toString();
 
     const livingArea = {};
-    if (areaMin) livingArea.from = areaMin;
-    if (areaMax) livingArea.to = areaMax;
+    if (areaMin) livingArea.from = areaMin.toString();
+    if (areaMax) livingArea.to = areaMax.toString();
 
     const subtype = [];
     const inputKeys = Object.keys(input);
