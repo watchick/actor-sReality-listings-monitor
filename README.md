@@ -6,7 +6,7 @@ Search and monitor sReality listings
 
 Enter location in free-form, as well as operation and object type. You could also specify relevant subtypes depending on object type. The actor also supports price and area filters. To be notified of new listings (or when the listings matching your criteria were changed or removed) provide your email address. Since it uses Puppeteer, the minimum memory for running is 2048 MB.
 
-> This actor does not extract/save any of the found listing's data except the link to the listing itself. Actor only helps you to automate your search. After the initial run, you could run it with the same input to monitor the changes. You will be notified in case previously found listing would be removed or other matching listings would be found.
+_This actor does not extract/save any of the found listing's data except the link to the listing itself. Actor only helps you to automate your search. After the initial run, you could run it with the same input to monitor the changes. You will be notified in case previously found listing would be removed or other matching listings would be found._
 
 ## Input
 
