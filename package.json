@@ -1,0 +1,23 @@
+{
+	"name": "sreality-listings-monitor",
+	"version": "0.0.1",
+	"description": "Apify actor for monitoring of sReality listings",
+	"dependencies": {
+		"apify": "^0.21.0"
+	},
+	"devDependencies": {
+		"@apify/eslint-config": "0.1.0",
+		"eslint": "^7.3.1"
+	},
+	"scripts": {
+		"start": "node src/main.js",
+		"lint": "eslint ./src --ext .js,.jsx",
+		"lint:fix": "eslint ./src --ext .js,.jsx --fix",
+		"test": "echo \"Error: oops, the actor has no tests yet, sad!\" && exit 1"
+	},
+	"author": {
+		"name": "Andrey Bykov",
+		"url": "https://github.com/AndreyBykov"
+	},
+	"license": "ISC"
+}

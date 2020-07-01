@@ -1,0 +1,408 @@
+{
+  "title": "Input Schema for sReality Listings Monitor",
+  "description": "Below you can provide object and operation types, as well as address to search for and monitor real estate ads. You could also apply filters and subtypes to narrow your search.",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "location": {
+      "title": "Location",
+      "type": "string",
+      "description": "Desired street address/location",
+      "editor": "textfield",
+      "example": "Říčany u Prahy, Czechia"
+    },
+    "offerType": {
+      "title": "Operation Type",
+      "type": "string",
+      "description": "Operation Type: sale, rent or auction",
+      "editor": "select",
+      "enum": [
+        "sale",
+        "rent",
+        "auction"
+      ],
+      "enumTitles": [
+        "Sale",
+        "Rent",
+        "Auction"
+      ],
+      "example": "sale"
+    },
+    "type": {
+      "title": "Object Type",
+      "type": "string",
+      "description": "Object Type: apartment, house, land, commercial or other",
+      "editor": "select",
+      "enum": [
+        "apartment",
+        "house",
+        "land",
+        "commercial",
+        "other"
+      ],
+      "enumTitles": [
+        "Apartment",
+        "House",
+        "Land",
+        "Commercial",
+        "Other"
+      ],
+      "example": "apartment"
+    },
+    "notificationsEmail": {
+      "title": "Email for Notifications",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "example": "email@example.com"
+    },
+    "proxyConfiguration": {
+      "title": "Proxy Configuration",
+      "type": "object",
+      "description": "",
+      "prefill": {
+        "useApifyProxy": false
+      },
+      "editor": "proxy"
+    },
+    "priceMin":{
+      "title": "From",
+      "type": "integer",
+      "description": "Minimum Price",
+      "sectionCaption": "Price",
+      "editor": "number",
+      "unit": "$",
+      "nullable": true
+    },
+    "priceMax":{
+      "title": "To",
+      "type": "integer",
+      "description": "Maximum Price",
+      "editor": "number",
+      "unit": "$",
+      "nullable": true
+    },
+    "areaMin":{
+      "title": "From",
+      "type": "integer",
+      "description": "Minimum Area",
+      "sectionCaption": "Usable Area",
+      "editor": "number",
+      "unit": "m2",
+      "nullable": true
+    },
+    "areaMax":{
+      "title": "To",
+      "type": "integer",
+      "description": "Maximum Area",
+      "editor": "number",
+      "unit": "m2",
+      "nullable": true
+    },
+    "apartment:1kk": {
+      "title": "1+kk",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "sectionCaption": "Apartment Subtypes",
+      "sectionDescription": "Check only if you have selected \"Apartment\" Object Type above",
+      "editor": "checkbox",
+      "groupCaption": "Subtypes",
+      "groupDescription": "Select Apartment Subtypes"
+    },
+    "apartment:11": {
+      "title": "1+1",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "apartment:2kk": {
+      "title": "2+kk",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "apartment:21": {
+      "title": "2+1",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "apartment:3kk": {
+      "title": "3+kk",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "apartment:31": {
+      "title": "3+1",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "apartment:4kk": {
+      "title": "4+kk",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "apartment:41": {
+      "title": "4+1",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "apartment:5kk": {
+      "title": "5+kk",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "apartment:51": {
+      "title": "5+1",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "apartment:6": {
+      "title": "6++",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "apartment:other": {
+      "title": "Other Apartment",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "house:family": {
+      "title": "Family",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "sectionCaption": "House Subtypes",
+      "sectionDescription": "Check only if you have selected \"House\" Object Type above",
+      "editor": "checkbox",
+      "groupCaption": "Subtypes",
+      "groupDescription": "Select House Subtypes"
+    },
+    "house:villa": {
+      "title": "Villa",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "house:cottage": {
+      "title": "Cottage",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "house:holiday": {
+      "title": "Holiday",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "house:planned": {
+      "title": "Planned",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "house:farm": {
+      "title": "Farm",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "house:historical": {
+      "title": "Historical",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "land:housing": {
+      "title": "Housing",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "sectionCaption": "Land Subtypes",
+      "sectionDescription": "Check only if you have selected \"Land\" Object Type above",
+      "editor": "checkbox",
+      "groupCaption": "Subtypes",
+      "groupDescription": "Select Land Subtypes"
+    },
+    "land:commercial": {
+      "title": "Commercial",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "land:agricultural": {
+      "title": "Agricultural",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "land:meadow": {
+      "title": "Meadow",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "land:forest": {
+      "title": "Forest",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "land:fishpond": {
+      "title": "Fishpond",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "land:orchard": {
+      "title": "Orchard",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "land:garden": {
+      "title": "Garden",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "commercial:office": {
+      "title": "Office",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "sectionCaption": "Commercial Subtypes",
+      "sectionDescription": "Check only if you have selected \"Commercial\" Object Type above",
+      "editor": "checkbox",
+      "groupCaption": "Subtypes",
+      "groupDescription": "Select Commercial Subtypes"
+    },
+    "commercial:warehouse": {
+      "title": "Warehouse",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "commercial:production": {
+      "title": "Production",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "commercial:shopping_space": {
+      "title": "Shopping Space",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "commercial:accommodation": {
+      "title": "Accommodation",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "commercial:restaurant": {
+      "title": "Restaurant",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "commercial:agricultural": {
+      "title": "Agricultural",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "commercial:building": {
+      "title": "Building",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "other:garage_full": {
+      "title": "Garage Full",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "sectionCaption": "Other Subtypes",
+      "sectionDescription": "Check only if you have selected \"Other\" Object Type above",
+      "editor": "checkbox",
+      "groupCaption": "Subtypes",
+      "groupDescription": "Select Other Subtypes"
+    },
+    "other:garage_space": {
+      "title": "Garage Space",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "other:mobile_home": {
+      "title": "Mobile Home",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "other:wine_cellar": {
+      "title": "Wine Cellar",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    },
+    "other:attic": {
+      "title": "Attic",
+      "type": "boolean",
+      "default": false,
+      "description": "",
+      "editor": "checkbox"
+    }
+  },
+  "required": [
+    "location",
+    "offerType",
+    "type"
+  ]
+}
