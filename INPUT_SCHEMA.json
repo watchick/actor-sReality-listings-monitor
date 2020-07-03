@@ -9,6 +9,7 @@
       "type": "string",
       "description": "Desired street address/location",
       "editor": "textfield",
+      "prefill": "Říčany u Prahy, Czechia",
       "example": "Říčany u Prahy, Czechia"
     },
     "offerType": {
@@ -26,7 +27,8 @@
         "Rent",
         "Auction"
       ],
-      "example": "sale"
+      "example": "sale",
+      "prefill": "sale"
     },
     "type": {
       "title": "Object Type",
@@ -47,7 +49,8 @@
         "Commercial",
         "Other"
       ],
-      "example": "apartment"
+      "example": "apartment",
+      "prefill": "apartment"
     },
     "notificationsEmail": {
       "title": "Email for Notifications",
