@@ -8,6 +8,8 @@ const {
     setOtherParams,
     loadSearchResults,
     extractProperties,
+    enqueueNextPage,
+    compareDataAndSendNotification,
 } = require('./tools');
 
 Apify.main(async () => {
@@ -20,10 +22,13 @@ Apify.main(async () => {
         location,
         price,
         livingArea,
+        maxPages,
     } = await getAndValidateInput();
 
     const sources = getSearchUrl(type);
     const requestList = await Apify.openRequestList(null, sources);
+    const requestQueue = (!maxPages || (maxPages && maxPages > 1)) ? await Apify.openRequestQueue() : null;
+    const dataset = await Apify.openDataset();
 
     // use named key-value store based on task ID or actor ID
     // to be able to have more listings checkers under one Apify account
@@ -36,14 +41,21 @@ Apify.main(async () => {
 
     const crawler = new Apify.PuppeteerCrawler({
         requestList,
+        requestQueue,
         proxyConfiguration,
-        handlePageFunction: async ({ page }) => {
-            await selectOfferType({ page, offerType });
-            await selectSubtype({ page, subtype, type });
-            await setLocation({ page, location });
-            await setOtherParams({ page, price, livingArea });
-            const propertiesFound = await loadSearchResults({ page, store, previousData, sendNotificationTo });
-            if (propertiesFound) await extractProperties({ page, store, previousData, sendNotificationTo });
+        handlePageFunction: async ({ page, request }) => {
+            const { userData: { label } } = request;
+            if (label === 'startPage') {
+                await selectOfferType({ page, offerType });
+                await selectSubtype({ page, subtype, type });
+                await setLocation({ page, location });
+                await setOtherParams({ page, price, livingArea });
+                const propertiesFound = await loadSearchResults({ page, store, previousData, sendNotificationTo });
+                if (propertiesFound) await extractProperties({ page, dataset });
+            } else if (label === 'searchPage') {
+                await extractProperties({ page, dataset });
+            }
+            await enqueueNextPage({ page, maxPages, requestQueue });
         },
         gotoFunction: async ({ page, request }) => {
             return page.goto(request.url, { waitUntil: ['load', 'networkidle0'] });
@@ -51,4 +63,6 @@ Apify.main(async () => {
     });
 
     await crawler.run();
+
+    await compareDataAndSendNotification({ store, dataset, previousData, sendNotificationTo });
 });

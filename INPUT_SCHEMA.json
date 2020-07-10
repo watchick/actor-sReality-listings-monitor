@@ -52,6 +52,14 @@
       "example": "apartment",
       "prefill": "apartment"
     },
+    "maxPages": {
+      "title": "Max number of pages",
+      "type": "integer",
+      "description": "Max number of search pages to process (default is 1)",
+      "editor": "number",
+      "nullable": true,
+      "prefill": 1
+    },
     "notificationsEmail": {
       "title": "Email for Notifications",
       "type": "string",

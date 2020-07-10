@@ -6,7 +6,7 @@ const { utils: { log, sleep } } = Apify;
 const getAndValidateInput = async () => {
     const input = await Apify.getInput();
 
-    const { location, offerType, type, proxyConfiguration, notificationsEmail, priceMin, priceMax, areaMin, areaMax } = input;
+    const { location, offerType, type, maxPages, proxyConfiguration, notificationsEmail, priceMin, priceMax, areaMin, areaMax } = input;
 
     log.info(`Search Location: ${location}`);
     log.info(`Object Type: ${type}`);
@@ -41,11 +41,15 @@ const getAndValidateInput = async () => {
         location,
         price,
         livingArea,
+        maxPages,
     };
 }
 
 const getSearchUrl = (type) => {
-    return [ESTATE_TYPES[type].url];
+    return [{
+        url: ESTATE_TYPES[type].url,
+        userData: { label: 'startPage' },
+    }];
 }
 
 const selectOfferType = async ({ page, offerType }) => {
@@ -120,36 +124,62 @@ const loadSearchResults = async ({ page, store, previousData, sendNotificationTo
     return showResultsButton;
 }
 
-const extractProperties = async ({ page, store, previousData, sendNotificationTo }) => {
-    const currentData = await page.evaluate(() => {
+const extractProperties = async ({ page, dataset }) => {
+    const listings = await page.evaluate(() => {
         const output = [];
         [...document.querySelectorAll('.dir-property-list > .property')].map((listing) => {
             if (!listing.querySelector('span[class*=tip]')) {
-                output.push(listing.querySelector('a').href);
+                output.push({ url: listing.querySelector('a').href });
             }
         });
         return output;
     });
+    await dataset.pushData(listings);
+}
+
+const enqueueNextPage = async ({ page, maxPages, requestQueue }) => {
+    const currentPage = await page.evaluate(() => {
+        const currentPageSelector = document.querySelector('.paging-item > a.active');
+        return currentPageSelector ? Number(currentPageSelector.innerText) : null;
+    });
+    const nextPageUrl = await page.evaluate(() => {
+        const nextPageSelector = document.querySelector('.paging-item > a.paging-next');
+        return nextPageSelector ? nextPageSelector.href : null;
+    });
+    if ((currentPage && maxPages && currentPage < maxPages) || (!maxPages && nextPageUrl)) {
+        await requestQueue.addRequest({ url: nextPageUrl, userData: { label: 'searchPage' } });
+    }
+}
+
+const compareDataAndSendNotification = async ({ store, dataset, previousData, sendNotificationTo }) => {
+    const outputItems = await dataset.getData().then(response => response.items);
+    const currentData = outputItems.map(entry => entry.url);
     await store.setValue('currentData', currentData);
     log.info(`${currentData.length} matching listing(s) found`)
 
     if (!previousData) {
-        log.info('Initial run, no previously found listings. Sending email');
-        if (sendNotificationTo) await Apify.call('apify/send-mail', {
-            to: sendNotificationTo,
-            subject: 'Apify sRelity Listings Monitor - Listing(s) Found',
-            text: 'Found listing(s):' + '\n' + currentData.join('\n'),
-        });
+        log.info('Initial run, no previously found listings');
+        if (sendNotificationTo) {
+            log.info('Sending Email');
+            await Apify.call('apify/send-mail', {
+                to: sendNotificationTo,
+                subject: 'Apify sRelity Listings Monitor - Listing(s) Found',
+                text: 'Found listing(s):' + '\n' + currentData.join('\n'),
+            });
+        }
     } else {
         await store.setValue('previousData', previousData);
         if (!(previousData.every(e => currentData.includes(e)) && currentData.every(e => previousData.includes(e)))) {
-            log.info('There were some updates. Sending email')
-            if (sendNotificationTo) await Apify.call('apify/send-mail', {
-                to: sendNotificationTo,
-                subject: 'Apify sRelity Listings Monitor - Listing(s) Updated',
-                text: 'Currently found listing(s):' + '\n' + currentData.join('\n') + '\n\n'
-                    + 'Previously found listing(s):' + '\n' + previousData.join('\n'),
-            });
+            log.info('There were some updates');
+            if (sendNotificationTo) {
+                log.info('Sending Email');
+                await Apify.call('apify/send-mail', {
+                    to: sendNotificationTo,
+                    subject: 'Apify sRelity Listings Monitor - Listing(s) Updated',
+                    text: 'Currently found listing(s):' + '\n' + currentData.join('\n') + '\n\n'
+                        + 'Previously found listing(s):' + '\n' + previousData.join('\n'),
+                });
+            }
         } else {
             log.info('No new listing(s) found');
         }
@@ -183,5 +213,7 @@ module.exports = {
     setLocation,
     setOtherParams,
     loadSearchResults,
-    extractProperties
+    enqueueNextPage,
+    extractProperties,
+    compareDataAndSendNotification,
 };
