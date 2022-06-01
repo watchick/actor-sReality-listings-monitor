@@ -5,8 +5,18 @@ const { utils: { log, sleep } } = Apify;
 
 const getAndValidateInput = async () => {
     const input = await Apify.getInput();
-
-    const { location, offerType, type, maxPages, proxyConfiguration, notificationsEmail, priceMin, priceMax, areaMin, areaMax } = input;
+    const {
+        location,
+        offerType,
+        type,
+        maxPages,
+        proxyConfiguration,
+        notificationsEmail,
+        priceMin,
+        priceMax,
+        areaMin,
+        areaMax,
+    } = input;
 
     log.info(`Search Location: ${location}`);
     log.info(`Object Type: ${type}`);
@@ -33,7 +43,7 @@ const getAndValidateInput = async () => {
     }
 
     return {
-        proxyConfiguration,
+        proxy: proxyConfiguration,
         sendNotificationTo: notificationsEmail,
         offerType,
         type,
@@ -53,12 +63,14 @@ const getSearchUrl = (type) => {
 }
 
 const selectOfferType = async ({ page, offerType }) => {
+    await removeCookiesConsentBanner(page);
     await page.click(OFFER_TYPES[offerType].selectors.switcher)
         .catch(err => { throw new Error(`No selector matched: offerType -> ${offerType}`); });
     await sleep(1000);
 }
 
 const selectSubtype = async ({ page, subtype, type }) => {
+    await removeCookiesConsentBanner(page);
     if (subtype.length > 0) {
         const subtypes = subtype.map(st => ESTATE_TYPES[type].subtypes[st]);
         const $$subtype = await matchNodesByContents(page, SELECTORS.subtype, subtypes)
@@ -71,6 +83,7 @@ const selectSubtype = async ({ page, subtype, type }) => {
 }
 
 const setLocation = async ({ page, location }) => {
+    await removeCookiesConsentBanner(page);
     await page.type(SELECTORS.location.input, location);
     await page.waitForFunction(selector => document.querySelector(selector), { polling: 'mutation' }, SELECTORS.location.autocomplete);
     await sleep(1000);
@@ -79,6 +92,7 @@ const setLocation = async ({ page, location }) => {
 }
 
 const setOtherParams = async ({ page, price, livingArea }) => {
+    await removeCookiesConsentBanner(page);
     if (price && price.from) await page.type(SELECTORS.price.from, price.from, { delay: 100 });
     if (price && price.to) await page.type(SELECTORS.price.to, price.to, { delay: 100 });
     if (livingArea && livingArea.from) await page.type(SELECTORS.area.from, livingArea.from, { delay: 100 });
@@ -88,8 +102,11 @@ const setOtherParams = async ({ page, price, livingArea }) => {
 }
 
 const loadSearchResults = async ({ page, store, previousData, sendNotificationTo }) => {
+    await removeCookiesConsentBanner(page);
+
     const showResultsButton = await page.evaluate(() => {
-        return document.querySelector('.return-cover') && !document.querySelector('.filter__buttons__not-found');
+        return document.querySelector('.return-cover')
+            && !document.querySelector('.filter__buttons__not-found');
     });
 
     if (showResultsButton) {
@@ -125,6 +142,7 @@ const loadSearchResults = async ({ page, store, previousData, sendNotificationTo
 }
 
 const extractProperties = async ({ page, dataset }) => {
+    await removeCookiesConsentBanner(page);
     const listings = await page.evaluate(() => {
         const output = [];
         [...document.querySelectorAll('.dir-property-list > .property')].map((listing) => {
@@ -138,6 +156,7 @@ const extractProperties = async ({ page, dataset }) => {
 }
 
 const enqueueNextPage = async ({ page, maxPages, requestQueue }) => {
+    await removeCookiesConsentBanner(page);
     const currentPage = await page.evaluate(() => {
         const currentPageSelector = document.querySelector('.paging-item > a.active');
         return currentPageSelector ? Number(currentPageSelector.innerText) : null;
@@ -187,6 +206,7 @@ const compareDataAndSendNotification = async ({ store, dataset, previousData, se
 }
 
 const matchNodesByContents = async (page, selector, contents) => {
+    await removeCookiesConsentBanner(page);
     contents = Array.isArray(contents) ? contents : [contents];
 
     const $$nodes = await page.$$(selector);
@@ -204,6 +224,10 @@ const matchNodesByContents = async (page, selector, contents) => {
         })
         .map(node => node.node);
 };
+
+const removeCookiesConsentBanner = async (page) => {
+    return page.evaluate(() => document.querySelector('.szn-cmp-dialog-container')?.remove());
+}
 
 module.exports = {
     getAndValidateInput,

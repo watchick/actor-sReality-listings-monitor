@@ -14,7 +14,7 @@ const {
 
 Apify.main(async () => {
     const {
-        proxyConfiguration: { useApifyProxy, apifyProxyGroups },
+        proxy,
         sendNotificationTo,
         offerType,
         type,
@@ -26,8 +26,8 @@ Apify.main(async () => {
     } = await getAndValidateInput();
 
     const sources = getSearchUrl(type);
-    const requestList = await Apify.openRequestList(null, sources);
-    const requestQueue = (!maxPages || (maxPages && maxPages > 1)) ? await Apify.openRequestQueue() : null;
+    const requestList = await Apify.openRequestList('sources', sources);
+    const requestQueue = (!maxPages || (maxPages && maxPages > 1)) ? await Apify.openRequestQueue() : undefined;
     const dataset = await Apify.openDataset();
 
     // use named key-value store based on task ID or actor ID
@@ -36,8 +36,7 @@ Apify.main(async () => {
     const store = await Apify.openKeyValueStore(storeName);
     const previousData = await store.getValue('currentData');
 
-    const groups = useApifyProxy && apifyProxyGroups ? apifyProxyGroups : undefined;
-    const proxyConfiguration = groups ? await Apify.createProxyConfiguration({ groups }) : undefined;
+    const proxyConfiguration = await Apify.createProxyConfiguration(proxy);
 
     const crawler = new Apify.PuppeteerCrawler({
         requestList,
@@ -57,9 +56,11 @@ Apify.main(async () => {
             }
             await enqueueNextPage({ page, maxPages, requestQueue });
         },
-        gotoFunction: async ({ page, request }) => {
-            return page.goto(request.url, { waitUntil: ['load', 'networkidle0'] });
-        },
+        preNavigationHooks: [
+            async ({ page, request }) => {
+                return page.goto(request.url, { waitUntil: ['load', 'networkidle0'] });
+            },
+        ]
     });
 
     await crawler.run();

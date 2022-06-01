@@ -3,11 +3,12 @@
 	"version": "0.0.1",
 	"description": "Apify actor for monitoring of sReality listings",
 	"dependencies": {
-		"apify": "^0.21.0"
+		"apify": "^2.3.2",
+		"puppeteer": "*"
 	},
 	"devDependencies": {
-		"@apify/eslint-config": "0.1.0",
-		"eslint": "^7.3.1"
+		"@apify/eslint-config": "0.3.1",
+		"eslint": "^8.16.0"
 	},
 	"scripts": {
 		"start": "node src/main.js",
