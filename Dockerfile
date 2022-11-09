@@ -13,5 +13,5 @@ RUN npm --quiet set progress=false \
     && rm -r ~/.npm
 
 COPY --chown=myuser . ./
-x
+
 CMD ./start_xvfb_and_run_cmd.sh && npm start --silent
