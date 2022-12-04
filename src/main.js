@@ -1,5 +1,5 @@
 import { Actor } from 'apify';
-import { PuppeteerCrawler } from '@crawlee/puppeteer';
+import { log, PuppeteerCrawler } from '@crawlee/puppeteer';
 import {
     getAndValidateInput,
     getSearchUrl,
@@ -44,25 +44,34 @@ const crawler = new PuppeteerCrawler({
         useChrome: true,
         launchOptions: { headless: false },
     },
-    async requestHandler({ page, request, log }) {
-        const { url, label } = request;
-        log.info(`Processing ${label} | ${url}`);
+    async requestHandler(context) {
+        const { log, page, request: { url, label } } = context;
 
         if (label === 'startPage') {
-            await selectOfferType({ page, offerType });
-            await selectSubtype({ page, subtype, type });
-            await setLocation({ page, location });
-            await setOtherParams({ page, price, livingArea });
-            const propertiesFound = await loadSearchResults({ page, store, previousData, sendNotificationTo });
-            if (propertiesFound) await extractProperties({ page, dataset });
+            log.info(`Search Location: ${location}`);
+            log.info(`Object Type: ${type}`);
+            log.info(`Operation Type: ${offerType}`);
+            log.info(`Processing Start Page | ${url}`);
+
+            await selectOfferType({ ...context, offerType });
+            await selectSubtype({ ...context, subtype, type });
+            await setLocation({ ...context, location });
+            await setOtherParams({ ...context, price, livingArea });
+            const propertiesFound = await loadSearchResults({ ...context, store, previousData, sendNotificationTo });
+            if (propertiesFound) {
+                log.info(`Processing First Page | ${page.url()}`);
+                await extractProperties({ ...context, dataset });
+            }
         } else if (label === 'searchPage') {
-            await extractProperties({ page, dataset });
+            log.info(`Processing Search Page | ${url}`);
+            await extractProperties({ ...context, dataset });
         }
 
-        await enqueueNextPage({ page, maxPages, crawler });
+        await enqueueNextPage({ ...context, maxPages });
     },
     preNavigationHooks: [
-        async (ctx, gotoOptions) => {
+        async ({ blockRequests }, gotoOptions) => {
+            await blockRequests({ urlPatterns: ['mapserver.mapy.cz', 'sdn.cz', '.png', '.jpeg', '.svg'] });
             gotoOptions.waitUntil = ['load', 'networkidle0'];
         },
     ]
@@ -71,6 +80,6 @@ const crawler = new PuppeteerCrawler({
 const initialRequests = getSearchUrl(type);
 await crawler.run(initialRequests);
 
-await compareDataAndSendNotification({ store, dataset, previousData, sendNotificationTo });
+await compareDataAndSendNotification({ log, store, dataset, previousData, sendNotificationTo });
 
 await Actor.exit();

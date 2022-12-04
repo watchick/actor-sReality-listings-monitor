@@ -1,5 +1,4 @@
 import { Actor } from 'apify';
-import { log } from '@crawlee/puppeteer';
 import { sleep } from '@crawlee/utils';
 import { SELECTORS, ESTATE_TYPES, OFFER_TYPES } from './consts.js'; // eslint-disable-line import/extensions
 
@@ -17,10 +16,6 @@ export async function getAndValidateInput() {
         areaMin,
         areaMax,
     } = input;
-
-    log.info(`Search Location: ${location}`);
-    log.info(`Object Type: ${type}`);
-    log.info(`Operation Type: ${offerType}`);
 
     if (!offerType || !type || !location) {
         throw new Error('Check input! Offer type (sale/rent/auction), type (house/apartment/etc) or location are missing');
@@ -71,7 +66,7 @@ export async function selectOfferType({ page, offerType }) {
     await sleep(1000);
 }
 
-export async function selectSubtype({ page, subtype, type }) {
+export async function selectSubtype({ page, log, subtype, type }) {
     await removeCookiesConsentBanner(page);
     if (subtype.length > 0) {
         const subtypes = subtype.map((st) => ESTATE_TYPES[type].subtypes[st]);
@@ -103,7 +98,7 @@ export async function setOtherParams({ page, price, livingArea }) {
     await sleep(2000);
 }
 
-export async function loadSearchResults({ page, store, previousData, sendNotificationTo }) {
+export async function loadSearchResults({ page, log, store, previousData, sendNotificationTo }) {
     await removeCookiesConsentBanner(page);
 
     const showResultsButton = await page.evaluate(() => {
@@ -177,7 +172,7 @@ export async function enqueueNextPage({ page, maxPages, crawler }) {
     }
 }
 
-export async function compareDataAndSendNotification({ store, dataset, previousData, sendNotificationTo }) {
+export async function compareDataAndSendNotification({ log, store, dataset, previousData, sendNotificationTo }) {
     const outputItems = await dataset.getData().then((resp) => resp.items);
     const currentData = outputItems.map((entry) => entry.url);
     await store.setValue('currentData', currentData);
