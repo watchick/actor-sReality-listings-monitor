@@ -217,7 +217,7 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     }
     const paramsList = await page.evaluate(() => {
         var descriptionParagraphs = [...document.querySelectorAll('li.param')].map((liParam) => {
-            var paramLabelText = liParam.querySelector('.param-label').innerText;
+            var paramLabelText = liParam.querySelector('.param-label').innerText.replace(/:/,"").trim();
             var paramValueText = liParam.querySelector('.param-value').innerText.trim();
             return {key:paramLabelText,value:paramValueText};
         });
@@ -241,7 +241,7 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
         var liItems = [...ul.querySelectorAll("li")].map((li) => {
             
             return {
-                "key":li.querySelector("label").innerText,
+                "key":li.querySelector("label").innerText.replace(/:/,"").trim(),
                 "value":{
                     "name":li.querySelector("a").innerText,
                     "url":li.querySelector("a").href,
