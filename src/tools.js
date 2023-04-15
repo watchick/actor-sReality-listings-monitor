@@ -315,26 +315,22 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     "extras":extraValues,
     "id": getIdFromUrl(url)
     };
-    for (const key in extraValues) {
-        if (Object.hasOwnProperty.call(extraValues, key)) {
-            const element = extraValues[key];
-            if(Object.hasOwnProperty.call(detail, "x_"+key)){
-                continue;
-            }
-            detail["x_"+key] = element;
+    for(var i = 0 ; i< extraValues.length; i++){
+        var key = extraValues[i].key;
+        if(Object.hasOwnProperty.call(detail, "x_"+key)){
+            continue;
         }
+        detail["x_"+key] = extraValues[i].value;
     }
     
-    for (const key in paramsList) {
-        if (Object.hasOwnProperty.call(paramsList, key)) {
-            const element = paramsList[key];
-            if(Object.hasOwnProperty.call(detail, "p_"+key)){
-                continue;
-            }
-            detail["p_"+key] = element;
+    for(var i = 0 ; i< paramsList.length; i++){
+        var key = paramsList[i].key;
+        if(Object.hasOwnProperty.call(detail, "p_"+key)){
+            continue;
         }
+        detail["p_"+key] = paramsList[i].value;
     }
-
+    
     await dataset.pushData(detail);
     console.log("detail ",detail);
     return detail;
