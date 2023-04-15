@@ -13,9 +13,7 @@ import {
     enqueueNextPage,
     compareDataAndSendNotification,
 } from './tools.js'; // eslint-disable-line import/extensions
-console.log("Start1- Test autobuildu");
 await Actor.init();
-console.log("Start2");
 const {
     proxy,
     sendNotificationTo,
@@ -26,7 +24,7 @@ const {
     price,
     livingArea,
 } = await getAndValidateInput();
-const maxPages = 2;
+const maxPages = 1;
 const dataset = await Actor.openDataset();
 // const detailDataset = await Actor.openDataset();
 // use named key-value store based on task ID or actor ID

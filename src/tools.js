@@ -1,6 +1,9 @@
 import { Actor } from 'apify';
 import { sleep } from '@crawlee/utils';
 import { SELECTORS, ESTATE_TYPES, OFFER_TYPES } from './consts.js'; // eslint-disable-line import/extensions
+import {
+    getIdFromUrl,
+} from './tools2.js'; // eslint-disable-line import/extensions
 
 export async function getAndValidateInput() {
     const input = await Actor.getInput();
@@ -50,10 +53,6 @@ export async function getAndValidateInput() {
     };
 }
 
-const getIdFromUrl = async (url) =>  {
-    var slashPart = url.split("/");
-    return slashPart[slashPart.length-1];
-};
 export function getSearchUrl(type) {
     return [{
         url: ESTATE_TYPES[type].url,
@@ -153,6 +152,10 @@ function TryExecute(name,func){
         return null;
     }
 }
+export function getIdFromUrl(url) {
+    var slashPart = url.split("/");
+    return slashPart[slashPart.length-1];
+};
 
 export async function searchPageExtractProperties({ page, dataset , url }) {
     
@@ -164,7 +167,6 @@ export async function searchPageExtractProperties({ page, dataset , url }) {
                 output.push({ 
                     "url": listing.querySelector('a').href,
                     "price": listing.querySelector('.norm-price').innerText,
-                    "id": getIdFromUrl(url)
                  });
             }
         });
@@ -173,7 +175,10 @@ export async function searchPageExtractProperties({ page, dataset , url }) {
     });
     console.log("listings ",listings);
     // await dataset.pushData(listings);
-    await dataset.pushData(listings);
+    await dataset.pushData(listings.map(l =>{
+        l.id = getIdFromUrl(l.url);
+        return l;
+    }));
     return listings;
 }
 
