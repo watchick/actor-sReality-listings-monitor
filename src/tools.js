@@ -50,6 +50,10 @@ export async function getAndValidateInput() {
     };
 }
 
+const getIdFromUrl = async (url) =>  {
+    var slashPart = url.split("/");
+    return slashPart[slashPart.length-1];
+};
 export function getSearchUrl(type) {
     return [{
         url: ESTATE_TYPES[type].url,
@@ -140,10 +144,7 @@ export async function loadSearchResults({ page, log, store, previousData, sendNo
     return showResultsButton;
 }
 
-export async function getIdFromUrl(url){
-    var slashPart = url.split("/");
-    return slashPart[slashPart.length-1];
-}
+
 function TryExecute(name,func){
     try{
         return func();
