@@ -1,9 +1,6 @@
 import { Actor } from 'apify';
 import { sleep } from '@crawlee/utils';
 import { SELECTORS, ESTATE_TYPES, OFFER_TYPES } from './consts.js'; // eslint-disable-line import/extensions
-import {
-    getIdFromUrl,
-} from './tools2.js'; // eslint-disable-line import/extensions
 
 export async function getAndValidateInput() {
     const input = await Actor.getInput();
