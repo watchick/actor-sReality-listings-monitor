@@ -236,7 +236,7 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     for(var i = 0; i<liLength; i++){
         var liName = await page.evaluate(async () => {
             var liItems = $("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
-            return liItems[i].innerText();
+            return liItems[i].innerText;
         });
         console.log("liName",liName);
         await page.click("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li:nth-child("+(i+1)+")");
