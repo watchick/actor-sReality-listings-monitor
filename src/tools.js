@@ -291,7 +291,7 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     var detail = {
     "url":url,
     "name":name,
-    "priceText":priceText,
+    "price":priceText,
     "priceAltText":priceAltText,
     "locationText":locationText,
     "description":description,
