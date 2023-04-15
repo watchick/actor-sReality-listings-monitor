@@ -24,7 +24,7 @@ const {
     price,
     livingArea,
 } = await getAndValidateInput();
-const maxPages = 1;
+const maxPages = 2;
 const dataset = await Actor.openDataset();
 // const detailDataset = await Actor.openDataset();
 // use named key-value store based on task ID or actor ID
@@ -105,7 +105,13 @@ const crawler = new PuppeteerCrawler({
 const initialRequests = [{
     url: "https://www.sreality.cz/hledani/prodej/pozemky/stavebni-parcely/kolin,kutna-hora,praha-zapad,praha-vychod,benesov?no_shares=1&plocha-od=800&plocha-do=10000000000&cena-od=2000000&cena-do=6000000&bez-aukce=1",
     label: 'directStartPage',
-}];//const initialRequests =getSearchUrl(type);
+},
+{
+    url: "https://www.sreality.cz/hledani/prodej/domy/rodinne-domy/praha-vychod,benesov,kutna-hora,praha-zapad,kolin?no_shares=1&plocha-od=160&plocha-do=10000000000&plocha-pozemku-od=800&plocha-pozemku-do=10000000000&bez-aukce=1",
+    label: 'directStartPage',
+}];
+//
+//const initialRequests =getSearchUrl(type);
 await crawler.run(initialRequests);
 
 await compareDataAndSendNotification({ log, store, dataset, previousData, sendNotificationTo });
