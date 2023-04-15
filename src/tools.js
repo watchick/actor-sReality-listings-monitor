@@ -209,20 +209,24 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
         });
         return descriptionParagraphs;
     });
-    const imageList = await page.evaluate(() => {
+    const imageList = await page.evaluate(async () => {
+        await page.click(".ob-c-gallery__list-opener");
         return [...document.querySelectorAll('.ob-c-gallery__img')].map((img) => {
             return img.src;
-        });
+        }).filter(x => x.length >0);
     });
     
     const extras = await page.evaluate(async () => {
+        console.log("extras");
         var liItems = $("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
         console.log("liItems",liItems.length);
         var extras = [];
         for(var i = 0; i<liItems; i++){
             var liName = liItems[i].innerText();
+            console.log("liName",liName);
             await page.click("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li:nth-child("+(i+1)+")");
             var ul = document.querySelector(".ob-c-horizontal-scrolling-menu").parentElement.parentElement.parentElement.querySelectorAll("ul")[1];
+            console.log("ul",ul);
             var liItems = ul.querySelectorAll("li").map((li) => {
                 return {
                     "key":li.querySelector("label").innerText,
