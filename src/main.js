@@ -78,7 +78,7 @@ const crawler = new PuppeteerCrawler({
             listings = await searchPageExtractProperties({ ...context, dataset });
         }else if (label === 'detailPage') {
             log.info(`Processing DETAIL PAGE | ${url}`);
-            listings = await detailPageExtractProperties({ ...context, dataset });
+            var detail = await detailPageExtractProperties({ ...context, dataset });
             // await extractProperties({ ...context, dataset });
         }
         console.log("isSearch, listings.length ",isSearch, listings.length)

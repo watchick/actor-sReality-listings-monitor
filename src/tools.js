@@ -201,10 +201,10 @@ export async function detailPageExtractProperties({ page, dataset }) {
             z: mapyCzUrl.split("z=")[1]
         };
     });
-
-    await dataset.pushData({"description":pList,gps:gps});
-    console.log("listings ",listings);
-    return listings;
+var detail = {"description":pList,gps:gps};
+    await dataset.pushData(detail);
+    console.log("detail ",detail);
+    return detail;
 }
 
 export async function enqueueNextPage({ page, maxPages, crawler }) {
