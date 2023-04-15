@@ -225,13 +225,10 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
         }).filter(x => x.length >0);
     });
     
-    const extras = [];
-
     var liLength = await page.evaluate(async () => {
         var liItems = document.querySelectorAll("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
         return liItems.length;
     });
-    console.log("liLength",liLength);
 
     var extraValues = await page.evaluate(async () => {
         var ul = document.querySelector(".ob-c-horizontal-scrolling-menu").parentElement.parentElement.parentElement.querySelectorAll("ul")[1];
@@ -318,6 +315,26 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     "extras":extraValues,
     "id": getIdFromUrl(url)
     };
+    for (const key in extraValues) {
+        if (Object.hasOwnProperty.call(extraValues, key)) {
+            const element = extraValues[key];
+            if(Object.hasOwnProperty.call(detail, key)){
+                continue;
+            }
+            detail[key] = element;
+        }
+    }
+    
+    for (const key in paramsList) {
+        if (Object.hasOwnProperty.call(paramsList, key)) {
+            const element = paramsList[key];
+            if(Object.hasOwnProperty.call(detail, key)){
+                continue;
+            }
+            detail[key] = element;
+        }
+    }
+
     await dataset.pushData(detail);
     console.log("detail ",detail);
     return detail;
