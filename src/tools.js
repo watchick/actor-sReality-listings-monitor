@@ -183,16 +183,23 @@ export async function detailPageExtractProperties({ page, dataset }) {
     });
     const gps = await page.evaluate(() => {
         
-        return TryExecute("gps",()=> {
-                var mapyCzUrl = document.querySelector('#s-map').querySelector("img[alt='Zobrazit na Mapy.cz']").parentElement.href;
-                return {
-                    url:mapyCzUrl,
-                    x: TryExecute("gps-x",mapa.split("x=")[1].split("&")),
-                    y: TryExecute("gps-y",mapa.split("y=")[1].split("&")),
-                    z: TryExecute("gps-z",mapa.split("z=")[1]),
-                };
-            }
-        );
+        // return TryExecute("gps",()=> {
+        //     var mapyCzUrl = document.querySelector('#s-map').querySelector("img[alt='Zobrazit na Mapy.cz']").parentElement.href;
+        //     return {
+        //         url:mapyCzUrl,
+        //         x: TryExecute("gps-x",()=>mapa.split("x=")[1].split("&")),
+        //         y: TryExecute("gps-y",()=>mapa.split("y=")[1].split("&")),
+        //         z: TryExecute("gps-z",()=>mapa.split("z=")[1]),
+        //     };
+        //     }
+        // );
+        var mapyCzUrl = document.querySelector('#s-map').querySelector("img[alt='Zobrazit na Mapy.cz']").parentElement.href;
+        return {
+            url:mapyCzUrl,
+            x: mapa.split("x=")[1].split("&")[0],
+            y: mapa.split("y=")[1].split("&")[0],
+            z: mapa.split("z=")[1]
+        };
     });
 
     $("#s-map").find("img[alt='Zobrazit na Mapy.cz']").parent().attr("href") 
