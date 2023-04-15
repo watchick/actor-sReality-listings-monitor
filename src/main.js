@@ -9,6 +9,7 @@ import {
     setOtherParams,
     searchPageExtractProperties,
     detailPageExtractProperties,
+    loadSearchResults,
     enqueueNextPage,
     compareDataAndSendNotification,
 } from './tools.js'; // eslint-disable-line import/extensions
@@ -28,7 +29,7 @@ const {
 } = await getAndValidateInput();
 
 const searchDataset = await Actor.openDataset();
-const detailDataset = await Actor.openDataset();
+// const detailDataset = await Actor.openDataset();
 // use named key-value store based on task ID or actor ID
 // to be able to have more listings checkers under one Apify account
 const storeName = `sReality-monitor-store-${!process.env.APIFY_ACTOR_TASK_ID
@@ -77,7 +78,7 @@ const crawler = new PuppeteerCrawler({
             listings = await searchPageExtractProperties({ ...context, searchDataset });
         }else if (label === 'detailPage') {
             log.info(`Processing DETAIL PAGE | ${url}`);
-            listings = await detailPageExtractProperties({ ...context, detailDataset });
+            listings = await detailPageExtractProperties({ ...context, searchDataset });
             // await extractProperties({ ...context, dataset });
         }
         if(isSearch){
