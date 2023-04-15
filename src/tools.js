@@ -155,9 +155,11 @@ export async function extractProperties({ page, dataset }) {
         return output;
     });
     await dataset.pushData(listings);
+    return listings;
 }
 
 export async function enqueueNextPage({ page, maxPages, crawler }) {
+    console.log("enqueueNextPage");
     await removeCookiesConsentBanner(page);
     const currentPage = await page.evaluate(() => {
         const currentPageSelector = document.querySelector('.paging-item > a.active');
@@ -168,6 +170,10 @@ export async function enqueueNextPage({ page, maxPages, crawler }) {
         return nextPageSelector ? nextPageSelector.href : null;
     });
     if ((currentPage && maxPages && currentPage < maxPages) || (!maxPages && nextPageUrl)) {
+        console.log("crawler.addRequests", {
+            url: nextPageUrl,
+            label: 'searchPage',
+        });
         await crawler.addRequests([{
             url: nextPageUrl,
             label: 'searchPage',

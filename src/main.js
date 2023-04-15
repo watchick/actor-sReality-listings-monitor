@@ -46,8 +46,10 @@ const crawler = new PuppeteerCrawler({
     },
     async requestHandler(context) {
         const { log, page, request: { url, label } } = context;
-
+        var isSearch = false;
+        var listings = [];
         if (label === 'startPage') {
+            isSearch = true;
             log.info(`Search Location: ${location}`);
             log.info(`Object Type: ${type}`);
             log.info(`Operation Type: ${offerType}`);
@@ -60,14 +62,26 @@ const crawler = new PuppeteerCrawler({
             const propertiesFound = await loadSearchResults({ ...context, store, previousData, sendNotificationTo });
             if (propertiesFound) {
                 log.info(`Processing First Page | ${page.url()}`);
-                await extractProperties({ ...context, dataset });
+                listings = await extractProperties({ ...context, dataset });
             }
         } else if (label === 'searchPage') {
+            isSearch = true;
             log.info(`Processing Search Page | ${url}`);
-            await extractProperties({ ...context, dataset });
+            listings = await extractProperties({ ...context, dataset });
+        }else if (label === 'detailPage') {
+            log.info(`Processing DETAIL PAGE | ${url}`);
+            // await extractProperties({ ...context, dataset });
         }
-
-        await enqueueNextPage({ ...context, maxPages });
+        if(isSearch){
+            if(listings.length > 0){
+                await crawler.addRequests(listings.slice(0, 2).map(l => 
+                    new {
+                        url: l.url,
+                        label: 'detailPage',
+                    }));
+            }
+            await enqueueNextPage({ ...context, maxPages });
+        }
     },
     preNavigationHooks: [
         async ({ blockRequests }, gotoOptions) => {
