@@ -155,6 +155,7 @@ export async function extractProperties({ page, dataset }) {
         return output;
     });
     await dataset.pushData(listings);
+    console.log("listings",listings);
     return listings;
 }
 

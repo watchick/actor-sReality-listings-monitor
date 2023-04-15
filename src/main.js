@@ -75,10 +75,12 @@ const crawler = new PuppeteerCrawler({
         if(isSearch){
             if(listings.length > 0){
                 await crawler.addRequests(listings.slice(0, 2).map(l => 
-                    new {
+                    { 
+                        return {
                         url: l.url,
                         label: 'detailPage',
-                    }));
+                    };
+                }));
             }
             await enqueueNextPage({ ...context, maxPages });
         }
