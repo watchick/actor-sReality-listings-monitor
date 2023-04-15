@@ -140,6 +140,10 @@ export async function loadSearchResults({ page, log, store, previousData, sendNo
     return showResultsButton;
 }
 
+export async function getIdFromUrl(url){
+    var slashPart = url.split("/");
+    return slashPart[slashPart.length-1];
+}
 function TryExecute(name,func){
     try{
         return func();
@@ -148,7 +152,8 @@ function TryExecute(name,func){
         return null;
     }
 }
-export async function searchPageExtractProperties({ page, dataset }) {
+
+export async function searchPageExtractProperties({ page, dataset , url }) {
     
     await removeCookiesConsentBanner(page);
     const listings = await page.evaluate(() => {
@@ -157,7 +162,8 @@ export async function searchPageExtractProperties({ page, dataset }) {
             if (!listing.querySelector('span[class*=tip]')) {
                 output.push({ 
                     "url": listing.querySelector('a').href,
-                    "price": listing.querySelector('.norm-price').innerText
+                    "price": listing.querySelector('.norm-price').innerText,
+                    "id": getIdFromUrl(url)
                  });
             }
         });
@@ -254,7 +260,8 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     "gps":gps,
     "images":imageList,
     "params":paramsList,
-    "extras":extras
+    "extras":extras,
+    "id": getIdFromUrl(url)
     };
     await dataset.pushData(detail);
     console.log("detail ",detail);

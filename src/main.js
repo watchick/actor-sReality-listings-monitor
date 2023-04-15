@@ -65,16 +65,16 @@ const crawler = new PuppeteerCrawler({
             
             if (propertiesFound) {
                 log.info(`Processing First Page | ${page.url()}`);
-                listings = await searchPageExtractProperties({ ...context, dataset });
+                listings = await searchPageExtractProperties({ ...context, dataset, url  });
             }
         } else if (label === 'directStartPage') {
             isSearch = true;
             log.info(`Processing Direct Page | ${page.url()}`);
-            listings = await searchPageExtractProperties({ ...context, dataset });
+            listings = await searchPageExtractProperties({ ...context, dataset, url  });
         } else if (label === 'searchPage') {
             isSearch = true;
             log.info(`Processing Search Page | ${url}`);
-            listings = await searchPageExtractProperties({ ...context, dataset });
+            listings = await searchPageExtractProperties({ ...context, dataset, url  });
         }else if (label === 'detailPage') {
             log.info(`Processing DETAIL PAGE | ${url}`);
             var detail = await detailPageExtractProperties({ ...context, dataset, url });
