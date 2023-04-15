@@ -217,7 +217,7 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     });
     
     console.log("extras");
-    var liItems = $("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
+    var liItems = document.querySelectorAll("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
     console.log("liItems",liItems.length);
     var extras = [];
     for(var i = 0; i<liItems; i++){
