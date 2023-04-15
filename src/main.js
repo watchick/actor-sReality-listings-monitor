@@ -29,6 +29,8 @@ const {
 } = await getAndValidateInput();
 
 const searchDataset = await Actor.openDataset();
+console.log("searchDataset",searchDataset);
+console.log("searchDataset",searchDataset.pushdata);
 // const detailDataset = await Actor.openDataset();
 // use named key-value store based on task ID or actor ID
 // to be able to have more listings checkers under one Apify account
