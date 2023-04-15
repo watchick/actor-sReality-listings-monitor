@@ -52,21 +52,25 @@ const crawler = new PuppeteerCrawler({
         console.log("label, url",label, url);
         if (label === 'startPage') {
             isSearch = true;
-            // log.info(`Search Location: ${location}`);
-            // log.info(`Object Type: ${type}`);
-            // log.info(`Operation Type: ${offerType}`);
-            // log.info(`Processing Start Page | ${url}`);
+            log.info(`Search Location: ${location}`);
+            log.info(`Object Type: ${type}`);
+            log.info(`Operation Type: ${offerType}`);
+            log.info(`Processing Start Page | ${url}`);
 
-            // await selectOfferType({ ...context, offerType });
-            // await selectSubtype({ ...context, subtype, type });
-            // await setLocation({ ...context, location });
-            // await setOtherParams({ ...context, price, livingArea });
-            // const propertiesFound =await loadSearchResults({ ...context, store, previousData, sendNotificationTo });
-            const propertiesFound = true;
+            await selectOfferType({ ...context, offerType });
+            await selectSubtype({ ...context, subtype, type });
+            await setLocation({ ...context, location });
+            await setOtherParams({ ...context, price, livingArea });
+            const propertiesFound =await loadSearchResults({ ...context, store, previousData, sendNotificationTo });
+            
             if (propertiesFound) {
                 log.info(`Processing First Page | ${page.url()}`);
                 listings = await searchPageExtractProperties({ ...context, searchDataset });
             }
+        } else if (label === 'directStartPage') {
+            isSearch = true;
+            log.info(`Processing Direct Page | ${page.url()}`);
+            listings = await searchPageExtractProperties({ ...context, searchDataset });
         } else if (label === 'searchPage') {
             isSearch = true;
             log.info(`Processing Search Page | ${url}`);
@@ -98,7 +102,10 @@ const crawler = new PuppeteerCrawler({
 });
 
 console.log("Start3");
-const initialRequests = "https://www.sreality.cz/hledani/prodej/pozemky/stavebni-parcely/kolin,kutna-hora,praha-zapad,praha-vychod,benesov?no_shares=1&plocha-od=800&plocha-do=10000000000&cena-od=2000000&cena-do=6000000&bez-aukce=1";//;getSearchUrl(type);
+const initialRequests = {
+    url: "https://www.sreality.cz/hledani/prodej/pozemky/stavebni-parcely/kolin,kutna-hora,praha-zapad,praha-vychod,benesov?no_shares=1&plocha-od=800&plocha-do=10000000000&cena-od=2000000&cena-do=6000000&bez-aukce=1",
+    label: 'directStartPage',
+};//const initialRequests =getSearchUrl(type);
 await crawler.run(initialRequests);
 
 await compareDataAndSendNotification({ log, store, searchDataset, previousData, sendNotificationTo });
