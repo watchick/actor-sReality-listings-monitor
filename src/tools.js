@@ -148,7 +148,7 @@ export async function extractProperties({ page, dataset }) {
             if (!listing.querySelector('span[class*=tip]')) {
                 output.push({ 
                     url: listing.querySelector('a').href,
-                    price: listing.querySelector('".norm-price').value
+                    price: listing.querySelector('.norm-price').value
                  });
             }
         });
