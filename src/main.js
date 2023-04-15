@@ -9,7 +9,6 @@ import {
     setOtherParams,
     searchPageExtractProperties,
     detailPageExtractProperties,
-    extractProperties,
     enqueueNextPage,
     compareDataAndSendNotification,
 } from './tools.js'; // eslint-disable-line import/extensions
