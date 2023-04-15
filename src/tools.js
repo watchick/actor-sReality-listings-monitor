@@ -140,6 +140,14 @@ export async function loadSearchResults({ page, log, store, previousData, sendNo
     return showResultsButton;
 }
 
+function TryExecute(name,func){
+    try{
+        return func();
+    }catch(e){
+        console.log("error-"+name,e);
+        return null;
+    }
+}
 export async function searchPageExtractProperties({ page, dataset }) {
     
     console.log("page, dataset ",page, dataset);
@@ -161,14 +169,6 @@ export async function searchPageExtractProperties({ page, dataset }) {
     // await dataset.pushData(listings);
     await dataset.pushData(listings);
     return listings;
-}
-export async function TryExecute(name,func){
-    try{
-        return func();
-    }catch(e){
-        console.log("error-"+name,e);
-        return null;
-    }
 }
 
 export async function detailPageExtractProperties({ page, dataset }) {
