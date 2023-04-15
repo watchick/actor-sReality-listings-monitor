@@ -156,8 +156,9 @@ export async function searchPageExtractProperties({ page, dataset }) {
         [...document.querySelectorAll('.dir-property-list > .property')].map((listing) => {
             if (!listing.querySelector('span[class*=tip]')) {
                 output.push({ 
-                    url: listing.querySelector('a').href,
-                    price: listing.querySelector('.norm-price').value
+                    "test":1,
+                    "url": listing.querySelector('a').href,
+                    "price": listing.querySelector('.norm-price').value
                  });
             }
         });
