@@ -203,7 +203,7 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     });
     const paramsList = await page.evaluate(() => {
         var descriptionParagraphs = [...document.querySelectorAll('li.param')].map((liParam) => {
-            var paramLabelText = liParam.querySelectorAll('.param-label').innerText;
+            var paramLabelText = liParam.querySelector('.param-label').innerText;
             var paramValueText = liParam.querySelector('.param-value').innerText.trim();
             return {key:paramLabelText,value:paramValueText};
         });
