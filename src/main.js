@@ -83,15 +83,21 @@ const crawler = new PuppeteerCrawler({
             listings = await detailPageExtractProperties({ ...context, dataset });
             // await extractProperties({ ...context, dataset });
         }
+        console.log("isSearch, listings.length ",isSearch, listings.length)
         if(isSearch){
             if(listings.length > 0){
-                await crawler.addRequests(listings.slice(0, 2).map(l => 
+                var part = listings.slice(0, 2);
+                console.log("part",part);
+                var partMapped = part.map(l => 
                     { 
                         return {
                         url: l.url,
                         label: 'detailPage',
                     };
-                }));
+                });
+                console.log("partMapped",partMapped);
+
+                await crawler.addRequests(partMapped);
             }
             await enqueueNextPage({ ...context, maxPages });
         }
