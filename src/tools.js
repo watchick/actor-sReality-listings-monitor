@@ -233,34 +233,34 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     });
     console.log("liLength",liLength);
 
-    for(var i = 0; i<liLength; i++){
-        var liName = await page.evaluate(async () => {
-            var liItems = document.querySelectorAll("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
-            console.log("liItems, i",liItems, i);
-            return liItems[i].innerText;
-        });
-        console.log("liName",liName);
-        await page.click("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li:nth-child("+(i+1)+")");
+    // for(var i = 0; i<liLength; i++){
+    //     var liName = await page.evaluate(async () => {
+    //         var liItems = document.querySelectorAll("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
+    //         console.log("liItems, i",liItems, i);
+    //         return liItems[i].innerText;
+    //     });
+    //     console.log("liName",liName);
+    //     await page.click("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li:nth-child("+(i+1)+")");
         
-        console.log("clicked");
-        extras.push(await page.evaluate(async () => {
-            var ul = document.querySelector(".ob-c-horizontal-scrolling-menu").parentElement.parentElement.parentElement.querySelectorAll("ul")[1];
-            console.log("ul",ul);
-            var liItems = ul.querySelectorAll("li").map((li) => {
-                return {
-                    "key":li.querySelector("label").innerText,
-                    "value":{
-                        "name":li.querySelector("a").innerText,
-                        "url":li.querySelector("a").href,
-                        "distance":li.querySelectorAll("span")[2].innerText
-                    }
-                }
-            });
-            return {"menu":liName,"values":liItems};
-        }));
-        console.log("extras",extras);
+    //     console.log("clicked");
+    //     extras.push(await page.evaluate(async () => {
+    //         var ul = document.querySelector(".ob-c-horizontal-scrolling-menu").parentElement.parentElement.parentElement.querySelectorAll("ul")[1];
+    //         console.log("ul",ul);
+    //         var liItems = ul.querySelectorAll("li").map((li) => {
+    //             return {
+    //                 "key":li.querySelector("label").innerText,
+    //                 "value":{
+    //                     "name":li.querySelector("a").innerText,
+    //                     "url":li.querySelector("a").href,
+    //                     "distance":li.querySelectorAll("span")[2].innerText
+    //                 }
+    //             }
+    //         });
+    //         return {"menu":liName,"values":liItems};
+    //     }));
+    //     console.log("extras",extras);
         
-    }
+    // }
 
     // await page.evaluate(async () => {
     //     console.log("extras");
