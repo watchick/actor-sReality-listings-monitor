@@ -150,7 +150,6 @@ function TryExecute(name,func){
 }
 export async function searchPageExtractProperties({ page, dataset }) {
     
-    console.log("page, dataset ",page, dataset);
     await removeCookiesConsentBanner(page);
     const listings = await page.evaluate(() => {
         const output = [];
