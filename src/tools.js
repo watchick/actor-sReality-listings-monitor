@@ -172,10 +172,10 @@ export async function searchPageExtractProperties({ page, dataset , url }) {
     });
     console.log("listings ",listings);
     // await dataset.pushData(listings);
-    await dataset.pushData(listings.map(l =>{
-        l.id = getIdFromUrl(l.url);
-        return l;
-    }));
+    // await dataset.pushData(listings.map(l =>{
+    //     l.id = getIdFromUrl(l.url);
+    //     return l;
+    // }));
     return listings;
 }
 
