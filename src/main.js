@@ -78,7 +78,6 @@ const crawler = new PuppeteerCrawler({
             var detail = await detailPageExtractProperties({ ...context, dataset, url });
             // await extractProperties({ ...context, dataset });
         }
-        console.log("isSearch, listings.length ",isSearch, listings.length)
         if(isSearch){
             if(listings.length > 0){
                 var partMapped = listings.map(l => 
@@ -103,10 +102,10 @@ const crawler = new PuppeteerCrawler({
 });
 
 const initialRequests = [
-//     {
-//     url: "https://www.sreality.cz/hledani/prodej/pozemky/stavebni-parcely/kolin,kutna-hora,praha-zapad,praha-vychod,benesov?no_shares=1&plocha-od=800&plocha-do=10000000000&cena-od=2000000&cena-do=6000000&bez-aukce=1",
-//     label: 'directStartPage',
-// },
+    {
+    url: "https://www.sreality.cz/hledani/prodej/pozemky/stavebni-parcely/kolin,kutna-hora,praha-zapad,praha-vychod,benesov?no_shares=1&plocha-od=800&plocha-do=10000000000&cena-od=2000000&cena-do=6000000&bez-aukce=1",
+    label: 'directStartPage',
+},
 {
     url: "https://www.sreality.cz/hledani/prodej/domy/rodinne-domy,vily/praha-vychod,benesov,kutna-hora,praha-zapad,kolin?no_shares=1&velikost=4-pokoje,5-a-vice&plocha-od=160&plocha-do=10000000000&cena-od=0&cena-do=10000000&plocha-pozemku-od=800&plocha-pozemku-do=10000000000&bez-aukce=1",
     label: 'directStartPage',
