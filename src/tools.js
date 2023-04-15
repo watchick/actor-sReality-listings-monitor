@@ -141,6 +141,8 @@ export async function loadSearchResults({ page, log, store, previousData, sendNo
 }
 
 export async function searchPageExtractProperties({ page, dataset }) {
+    
+    console.log("page, dataset ",page, dataset);
     await removeCookiesConsentBanner(page);
     const listings = await page.evaluate(() => {
         const output = [];
@@ -156,6 +158,7 @@ export async function searchPageExtractProperties({ page, dataset }) {
         return output;
     });
     console.log("listings ",listings);
+    // await dataset.pushData(listings);
     await dataset.pushData(listings);
     return listings;
 }
