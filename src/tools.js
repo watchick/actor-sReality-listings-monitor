@@ -232,7 +232,8 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
         return liItems.length;
     });
     console.log("liLength",liLength);
-    extras.push(await page.evaluate(async () => {
+
+    var extraValues = await page.evaluate(async () => {
         var ul = document.querySelector(".ob-c-horizontal-scrolling-menu").parentElement.parentElement.parentElement.querySelectorAll("ul")[1];
 
         var liItems = [...ul.querySelectorAll("li")].map((li) => {
@@ -246,8 +247,8 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
                 }
             }
         });
-        return {"menu":liName,"values":liItems};
-    }));
+        return liItems;
+    });
     console.log("extras",extras);
     // for(var i = 0; i<liLength; i++){
     //     var liName = await page.evaluate(async () => {
