@@ -171,7 +171,7 @@ export async function searchPageExtractProperties({ page, dataset }) {
     return listings;
 }
 
-export async function detailPageExtractProperties({ page, dataset }) {
+export async function detailPageExtractProperties({ page, dataset, url }) {
     await removeCookiesConsentBanner(page);
     const pList = await page.evaluate(() => {
         const output = [];
@@ -182,17 +182,6 @@ export async function detailPageExtractProperties({ page, dataset }) {
         return descriptionParagraphs;
     });
     const gps = await page.evaluate(() => {
-        
-        // return TryExecute("gps",()=> {
-        //     var mapyCzUrl = document.querySelector('#s-map').querySelector("img[alt='Zobrazit na Mapy.cz']").parentElement.href;
-        //     return {
-        //         url:mapyCzUrl,
-        //         x: TryExecute("gps-x",()=>mapa.split("x=")[1].split("&")),
-        //         y: TryExecute("gps-y",()=>mapa.split("y=")[1].split("&")),
-        //         z: TryExecute("gps-z",()=>mapa.split("z=")[1]),
-        //     };
-        //     }
-        // );
         var mapyCzUrl = document.querySelector('#s-map').querySelector("img[alt='Zobrazit na Mapy.cz']").parentElement.href;
         return {
             url:mapyCzUrl,
@@ -201,7 +190,36 @@ export async function detailPageExtractProperties({ page, dataset }) {
             z: mapyCzUrl.split("z=")[1]
         };
     });
-var detail = {"description":pList,gps:gps};
+    const name = await page.evaluate(() => {
+        return document.querySelector('.property-title').querySelector(".name").innerText;
+    });
+    const locationText = await page.evaluate(() => {
+        return document.querySelector(".location-text").innerText;
+    });
+    const priceText = await page.evaluate(() => {
+        return document.querySelector(".norm-price").innerText;
+    });
+    const priceAltText = await page.evaluate(() => {
+        return document.querySelector(".alt-price").innerText;
+    });
+    const paramsList = await page.evaluate(() => {
+        var descriptionParagraphs = [...document.querySelectorAll('li.param')].map((liParam) => {
+            var paramLabelText = liParam.querySelectorAll('.param-label').innerText;
+            var paramValueText = liParam.querySelector('.param-value').innerText.trim();
+            return {key:paramLabelText,value:paramValueText};
+        });
+        return descriptionParagraphs;
+    });
+var detail = {
+    "url":url,
+    "name":name,
+    "priceText":priceText,
+    "priceAltText":priceAltText,
+    "locationText":locationText,
+    "description":pList,
+    "gps":gps,
+    "params":paramsList
+    };
     await dataset.pushData(detail);
     console.log("detail ",detail);
     return detail;
