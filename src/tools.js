@@ -317,7 +317,7 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     };
     for(var i = 0 ; i< extraValues.length; i++){
         var key = extraValues[i].key;
-        if(Object.hasOwnProperty.call(detail, "x_"+key)){
+        if(Object.hasOwnProperty.call(detail, "x_"+key+"_n") ||Object.hasOwnProperty.call(detail, "x_"+key+"_d")){
             continue;
         }
         detail["x_"+key+"_n"] = extraValues[i].value.name;
