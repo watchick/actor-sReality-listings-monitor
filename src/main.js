@@ -26,7 +26,7 @@ const {
     price,
     livingArea,
 } = await getAndValidateInput();
-const maxPages = 3;
+const maxPages = 2;
 const dataset = await Actor.openDataset();
 // const detailDataset = await Actor.openDataset();
 // use named key-value store based on task ID or actor ID
