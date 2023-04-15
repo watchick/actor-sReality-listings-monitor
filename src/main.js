@@ -12,7 +12,7 @@ import {
     enqueueNextPage,
     compareDataAndSendNotification,
 } from './tools.js'; // eslint-disable-line import/extensions
-console.log("Start1");
+console.log("Start1- Test autobuildu");
 await Actor.init();
 console.log("Start2");
 const {
