@@ -107,7 +107,7 @@ const initialRequests = [{
     label: 'directStartPage',
 },
 {
-    url: "https://www.sreality.cz/hledani/prodej/domy/rodinne-domy/praha-vychod,benesov,kutna-hora,praha-zapad,kolin?no_shares=1&plocha-od=160&plocha-do=10000000000&plocha-pozemku-od=800&plocha-pozemku-do=10000000000&bez-aukce=1",
+    url: "https://www.sreality.cz/hledani/prodej/domy/rodinne-domy,vily/kolin,praha-zapad,kutna-hora,benesov,praha-vychod?no_shares=1&plocha-od=160&plocha-do=10000000000&cena-od=0&cena-do=10000000&plocha-pozemku-od=800&plocha-pozemku-do=10000000000&bez-aukce=1",
     label: 'directStartPage',
 }];
 //
