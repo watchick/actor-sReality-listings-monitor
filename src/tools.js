@@ -172,13 +172,13 @@ export async function searchPageExtractProperties({ page, dataset }) {
 
 export async function detailPageExtractProperties({ page, dataset, url }) {
     await removeCookiesConsentBanner(page);
-    const pList = await page.evaluate(() => {
+    const description = await page.evaluate(() => {
         const output = [];
         var descriptionParagraphs = [...document.querySelectorAll('.description > p')].map((descriptionP) => {
             console.log("descriptionP",descriptionP,descriptionP.innerText);
             return descriptionP.innerText
         });
-        return descriptionParagraphs;
+        return descriptionParagraphs.join("\n");
     });
     const gps = await page.evaluate(() => {
         var mapyCzUrl = document.querySelector('#s-map').querySelector("img[alt='Zobrazit na Mapy.cz']").parentElement.href;
@@ -209,14 +209,22 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
         });
         return descriptionParagraphs;
     });
+    const imageList = await page.evaluate(() => {
+        return [...document.querySelectorAll('.ob-c-gallery__img')].map((img) => {
+            return img.src;
+        });
+    });
+
+    $(".ob-c-gallery__img") 
 var detail = {
     "url":url,
     "name":name,
     "priceText":priceText,
     "priceAltText":priceAltText,
     "locationText":locationText,
-    "description":pList,
+    "description":description,
     "gps":gps,
+    "images":imageList,
     "params":paramsList
     };
     await dataset.pushData(detail);
