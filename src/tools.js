@@ -152,10 +152,11 @@ export async function searchPageExtractProperties({ page, dataset }) {
                  });
             }
         });
+        console.log("output",output);
         return output;
     });
-    await dataset.pushData(listings);
     console.log("listings ",listings);
+    await dataset.pushData(listings);
     return listings;
 }
 export async function TryExecute(name,func){
