@@ -201,7 +201,6 @@ export async function detailPageExtractProperties({ page, dataset }) {
         };
     });
 
-    $("#s-map").find("img[alt='Zobrazit na Mapy.cz']").parent().attr("href") 
     await dataset.pushData({"description":pList,gps:gps});
     console.log("listings ",listings);
     return listings;
