@@ -249,7 +249,7 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
         });
         return liItems;
     });
-    console.log("extras",extras);
+    console.log("extras",extraValues);
     // for(var i = 0; i<liLength; i++){
     //     var liName = await page.evaluate(async () => {
     //         var liItems = document.querySelectorAll("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
@@ -304,7 +304,6 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     //     }
     // });
     
-    console.log(extras);
     
     var detail = {
     "url":url,
@@ -316,7 +315,7 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     "gps":gps,
     "images":imageList,
     "params":paramsList,
-    "extras":extras,
+    "extras":extraValues,
     "id": getIdFromUrl(url)
     };
     await dataset.pushData(detail);
