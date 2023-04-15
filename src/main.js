@@ -102,10 +102,10 @@ const crawler = new PuppeteerCrawler({
 });
 
 console.log("Start3");
-const initialRequests = {
+const initialRequests = [{
     url: "https://www.sreality.cz/hledani/prodej/pozemky/stavebni-parcely/kolin,kutna-hora,praha-zapad,praha-vychod,benesov?no_shares=1&plocha-od=800&plocha-do=10000000000&cena-od=2000000&cena-do=6000000&bez-aukce=1",
     label: 'directStartPage',
-};//const initialRequests =getSearchUrl(type);
+}];//const initialRequests =getSearchUrl(type);
 await crawler.run(initialRequests);
 
 await compareDataAndSendNotification({ log, store, searchDataset, previousData, sendNotificationTo });
