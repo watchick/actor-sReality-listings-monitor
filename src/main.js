@@ -25,9 +25,8 @@ const {
     location,
     price,
     livingArea,
-    maxPages,
 } = await getAndValidateInput();
-
+const maxPages = 3;
 const dataset = await Actor.openDataset();
 // const detailDataset = await Actor.openDataset();
 // use named key-value store based on task ID or actor ID
@@ -84,16 +83,13 @@ const crawler = new PuppeteerCrawler({
         console.log("isSearch, listings.length ",isSearch, listings.length)
         if(isSearch){
             if(listings.length > 0){
-                var part = listings.slice(0, 5);
-                console.log("part",part);
-                var partMapped = part.map(l => 
+                var partMapped = listings.map(l => 
                     { 
                         return {
                         url: l.url,
                         label: 'detailPage',
                     };
                 });
-                console.log("partMapped",partMapped);
 
                 await crawler.addRequests(partMapped);
             }
@@ -108,7 +104,6 @@ const crawler = new PuppeteerCrawler({
     ]
 });
 
-console.log("Start3");
 const initialRequests = [{
     url: "https://www.sreality.cz/hledani/prodej/pozemky/stavebni-parcely/kolin,kutna-hora,praha-zapad,praha-vychod,benesov?no_shares=1&plocha-od=800&plocha-do=10000000000&cena-od=2000000&cena-do=6000000&bez-aukce=1",
     label: 'directStartPage',
@@ -117,6 +112,4 @@ await crawler.run(initialRequests);
 
 await compareDataAndSendNotification({ log, store, dataset, previousData, sendNotificationTo });
 
-console.log("Start4");
 await Actor.exit();
-console.log("Done");
