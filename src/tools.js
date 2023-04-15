@@ -216,28 +216,31 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
         }).filter(x => x.length >0);
     });
     
-    console.log("extras");
-    var liItems = document.querySelectorAll("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
-    console.log("liItems",liItems.length);
-    var extras = [];
-    for(var i = 0; i<liItems; i++){
-        var liName = liItems[i].innerText();
-        console.log("liName",liName);
-        await page.click("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li:nth-child("+(i+1)+")");
-        var ul = document.querySelector(".ob-c-horizontal-scrolling-menu").parentElement.parentElement.parentElement.querySelectorAll("ul")[1];
-        console.log("ul",ul);
-        var liItems = ul.querySelectorAll("li").map((li) => {
-            return {
-                "key":li.querySelector("label").innerText,
-                "value":{
-                    "name":li.querySelector("a").innerText,
-                    "url":li.querySelector("a").href,
-                    "distance":li.querySelectorAll("span")[2].innerText
-                }
-            }
-        });
-        extras.push({"menu":liName,"values":liItems});
-    }
+    const extras = [];
+    // await page.evaluate(async () => {
+    //     console.log("extras");
+    //     var liItems = $("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
+    //     console.log("liItems",liItems.length);
+    //     var extras = [];
+    //     for(var i = 0; i<liItems; i++){
+    //         var liName = liItems[i].innerText();
+    //         console.log("liName",liName);
+    //         await page.click("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li:nth-child("+(i+1)+")");
+    //         var ul = document.querySelector(".ob-c-horizontal-scrolling-menu").parentElement.parentElement.parentElement.querySelectorAll("ul")[1];
+    //         console.log("ul",ul);
+    //         var liItems = ul.querySelectorAll("li").map((li) => {
+    //             return {
+    //                 "key":li.querySelector("label").innerText,
+    //                 "value":{
+    //                     "name":li.querySelector("a").innerText,
+    //                     "url":li.querySelector("a").href,
+    //                     "distance":li.querySelectorAll("span")[2].innerText
+    //                 }
+    //             }
+    //         });
+    //         extras.push({"menu":liName,"values":liItems});
+    //     }
+    // });
     
     console.log(extras);
     
