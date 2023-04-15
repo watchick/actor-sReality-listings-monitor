@@ -234,8 +234,9 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     console.log("liLength",liLength);
     extras.push(await page.evaluate(async () => {
         var ul = document.querySelector(".ob-c-horizontal-scrolling-menu").parentElement.parentElement.parentElement.querySelectorAll("ul")[1];
-        console.log("ul",ul);
-        var liItems = ul.querySelectorAll("li").map((li) => {
+
+        var liItems = [...ul.querySelectorAll("li")].map((li) => {
+            
             return {
                 "key":li.querySelector("label").innerText,
                 "value":{
