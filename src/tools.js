@@ -228,14 +228,14 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     const extras = [];
 
     var liLength = await page.evaluate(async () => {
-        var liItems = $("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
+        var liItems = document.querySelectorAll("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
         return liItems.length;
     });
     console.log("liLength",liLength);
 
     for(var i = 0; i<liLength; i++){
         var liName = await page.evaluate(async () => {
-            var liItems = $("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
+            var liItems = document.querySelectorAll("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
             return liItems[i].innerText;
         });
         console.log("liName",liName);
