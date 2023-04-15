@@ -214,9 +214,33 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
             return img.src;
         });
     });
-
-    $(".ob-c-gallery__img") 
-var detail = {
+    
+    const extras = await page.evaluate(async () => {
+        var liItems = $("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li");
+        console.log("liItems",liItems.length);
+        var extras = [];
+        for(var i = 0; i<liItems; i++){
+            var liName = liItems[i].innerText();
+            await page.click("preact[component='public-equipment'] .ob-c-horizontal-scrolling-menu__content ul li:nth-child("+(i+1)+")");
+            var ul = document.querySelector(".ob-c-horizontal-scrolling-menu").parentElement.parentElement.parentElement.querySelectorAll("ul")[1];
+            var liItems = ul.querySelectorAll("li").map((li) => {
+                return {
+                    "key":li.querySelector("label").innerText,
+                    "value":{
+                        "name":li.querySelector("a").innerText,
+                        "url":li.querySelector("a").href,
+                        "distance":li.querySelectorAll("span")[2].innerText
+                    }
+                }
+            });
+            extras.push({"menu":liName,"values":liItems});
+        }
+        return extras;
+    });
+    
+    console.log(extras);
+    
+    var detail = {
     "url":url,
     "name":name,
     "priceText":priceText,
@@ -225,7 +249,8 @@ var detail = {
     "description":description,
     "gps":gps,
     "images":imageList,
-    "params":paramsList
+    "params":paramsList,
+    "extras":extras
     };
     await dataset.pushData(detail);
     console.log("detail ",detail);
