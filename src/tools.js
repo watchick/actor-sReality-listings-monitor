@@ -320,7 +320,8 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
         if(Object.hasOwnProperty.call(detail, "x_"+key)){
             continue;
         }
-        detail["x_"+key] = extraValues[i].value;
+        detail["x_"+key+"_n"] = extraValues[i].value.name;
+        detail["x_"+key+"_d"] = extraValues[i].value.distance;
     }
     
     for(var i = 0 ; i< paramsList.length; i++){
