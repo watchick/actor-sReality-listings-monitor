@@ -140,7 +140,7 @@ export async function loadSearchResults({ page, log, store, previousData, sendNo
     return showResultsButton;
 }
 
-export async function extractProperties({ page, dataset }) {
+export async function searchPageExtractProperties({ page, dataset }) {
     await removeCookiesConsentBanner(page);
     const listings = await page.evaluate(() => {
         const output = [];
@@ -155,6 +155,44 @@ export async function extractProperties({ page, dataset }) {
         return output;
     });
     await dataset.pushData(listings);
+    console.log("listings ",listings);
+    return listings;
+}
+export async function TryExecute(name,func){
+    try{
+        return func();
+    }catch(e){
+        console.log("error-"+name,e);
+        return null;
+    }
+}
+
+export async function detailPageExtractProperties({ page, dataset }) {
+    await removeCookiesConsentBanner(page);
+    const pList = await page.evaluate(() => {
+        const output = [];
+        var descriptionParagraphs = [...document.querySelectorAll('.description > p')].map((descriptionP) => {
+            console.log("descriptionP",descriptionP,descriptionP.innerText);
+            return descriptionP.innerText
+        });
+        return descriptionParagraphs;
+    });
+    const gps = await page.evaluate(() => {
+        
+        return TryExecute("gps",()=> {
+                var mapyCzUrl = document.querySelector('#s-map').querySelector("img[alt='Zobrazit na Mapy.cz']").parentElement.href;
+                return {
+                    url:mapyCzUrl,
+                    x: TryExecute("gps-x",mapa.split("x=")[1].split("&")),
+                    y: TryExecute("gps-y",mapa.split("y=")[1].split("&")),
+                    z: TryExecute("gps-z",mapa.split("z=")[1]),
+                };
+            }
+        );
+    });
+
+    $("#s-map").find("img[alt='Zobrazit na Mapy.cz']").parent().attr("href") 
+    await dataset.pushData({"description":pList,gps:gps});
     console.log("listings ",listings);
     return listings;
 }
