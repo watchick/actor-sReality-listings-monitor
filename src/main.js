@@ -12,9 +12,9 @@ import {
     enqueueNextPage,
     compareDataAndSendNotification,
 } from './tools.js'; // eslint-disable-line import/extensions
-
+console.log("Start1");
 await Actor.init();
-
+console.log("Start2");
 const {
     proxy,
     sendNotificationTo,
@@ -77,9 +77,11 @@ const crawler = new PuppeteerCrawler({
     ]
 });
 
+console.log("Start3");
 const initialRequests = getSearchUrl(type);
 await crawler.run(initialRequests);
 
 await compareDataAndSendNotification({ log, store, dataset, previousData, sendNotificationTo });
 
+console.log("Start4");
 await Actor.exit();
