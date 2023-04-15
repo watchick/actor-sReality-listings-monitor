@@ -207,9 +207,14 @@ export async function detailPageExtractProperties({ page, dataset, url }) {
     const priceText = await page.evaluate(() => {
         return document.querySelector(".norm-price").innerText;
     });
-    const priceAltText = await page.evaluate(() => {
-        return document.querySelector(".alt-price").innerText;
+    var priceAltText = null;
+    try{
+        priceAltText = await page.evaluate(() => {
+            return document.querySelector(".alt-price").innerText;
     });
+    }catch(ex){
+        console.log("Error-altprice", url,ex);
+    }
     const paramsList = await page.evaluate(() => {
         var descriptionParagraphs = [...document.querySelectorAll('li.param')].map((liParam) => {
             var paramLabelText = liParam.querySelector('.param-label').innerText;
