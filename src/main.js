@@ -28,9 +28,9 @@ const {
     maxPages,
 } = await getAndValidateInput();
 
-const searchDataset = await Actor.openDataset();
-console.log("searchDataset",searchDataset);
-console.log("searchDataset",searchDataset.pushdata);
+const dataset = await Actor.openDataset();
+console.log("dataset",dataset);
+console.log("dataset",dataset.pushdata);
 // const detailDataset = await Actor.openDataset();
 // use named key-value store based on task ID or actor ID
 // to be able to have more listings checkers under one Apify account
@@ -68,19 +68,19 @@ const crawler = new PuppeteerCrawler({
             
             if (propertiesFound) {
                 log.info(`Processing First Page | ${page.url()}`);
-                listings = await searchPageExtractProperties({ ...context, searchDataset });
+                listings = await searchPageExtractProperties({ ...context, dataset });
             }
         } else if (label === 'directStartPage') {
             isSearch = true;
             log.info(`Processing Direct Page | ${page.url()}`);
-            listings = await searchPageExtractProperties({ ...context, searchDataset });
+            listings = await searchPageExtractProperties({ ...context, dataset });
         } else if (label === 'searchPage') {
             isSearch = true;
             log.info(`Processing Search Page | ${url}`);
-            listings = await searchPageExtractProperties({ ...context, searchDataset });
+            listings = await searchPageExtractProperties({ ...context, dataset });
         }else if (label === 'detailPage') {
             log.info(`Processing DETAIL PAGE | ${url}`);
-            listings = await detailPageExtractProperties({ ...context, searchDataset });
+            listings = await detailPageExtractProperties({ ...context, dataset });
             // await extractProperties({ ...context, dataset });
         }
         if(isSearch){
@@ -111,7 +111,7 @@ const initialRequests = [{
 }];//const initialRequests =getSearchUrl(type);
 await crawler.run(initialRequests);
 
-await compareDataAndSendNotification({ log, store, searchDataset, previousData, sendNotificationTo });
+await compareDataAndSendNotification({ log, store, dataset, previousData, sendNotificationTo });
 
 console.log("Start4");
 await Actor.exit();
