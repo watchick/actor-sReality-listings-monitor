@@ -84,7 +84,7 @@ const crawler = new PuppeteerCrawler({
         console.log("isSearch, listings.length ",isSearch, listings.length)
         if(isSearch){
             if(listings.length > 0){
-                var part = listings.slice(0, 1);
+                var part = listings.slice(0, 5);
                 console.log("part",part);
                 var partMapped = part.map(l => 
                     { 
